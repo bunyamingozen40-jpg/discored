@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>Sohbet</h2>
+
+    <input id="name" placeholder="Adın">
+    <br><br>
+
+    <input id="msgBox" placeholder="Mesaj yaz">
+    <button onclick="sendMsg()">Gönder</button>
+
+    <ul id="chat"></ul>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <script>
+      const socket = io("http://localhost:3000");
+
+      socket.on("mesaj", (data) => {
+        const li = document.createElement("li");
+        li.textContent = data.name + ": " + data.msg;
+        document.getElementById("chat").appendChild(li);
+      });
+
+      function sendMsg() {
+        const name = document.getElementById("name").value;
+        const msg = document.getElementById("msgBox").value;
+
+        socket.emit("mesaj", { name: name, msg: msg });
+      }
+    </script>
+  </body>
+</html>
